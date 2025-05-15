@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tool.name }} | Tool Details</title>
+    <style>
+        /* Base styles */
+        :root {
+            --primary-color: #007BFF;
+            --primary-dark: #0056b3;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-gray: #f4f4f4;
+            --border-color: #ddd;
+            --shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Tool details card */
+        .tool-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 30px;
+            position: relative;
+        }
+        
+        .tool-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        
+        .tool-body {
+            padding: 30px;
+        }
+        
+        .tool-description {
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .tool-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .meta-item {
+            background-color: rgba(0, 0, 0, 0.02);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .meta-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .meta-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        /* Status badge */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .status-available {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-unavailable {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        /* Maintenance section */
+        .maintenance-history {
+            margin-top: 40px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #444;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th,
+        .history-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .history-table th {
+            background-color: rgba(0, 123, 255, 0.1);
+            font-weight: 500;
+        }
+        
+        .history-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        /* Action buttons */
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        /* Responsive design */
+        @media screen and (max-width: 768px) {
+            .tool-meta {
+                grid-template-columns: 1fr;
+            }
+            
+            .history-table {
+                border: 0;
+            }
+            
+            .history-table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+            
+            .history-table tr {
+                border-bottom: 3px solid var(--border-color);
+                display: block;
+                margin-bottom: 15px;
+                background-color: white;
+                box-shadow: var(--shadow);
+                border-radius: 8px;
+            }
+            
+            .history-table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: 0.9em;
+                text-align: right;
+                position: relative;
+                padding-left: 50%;
+            }
+            
+            .history-table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+                position: absolute;
+                left: 15px;
+                color: #555;
+            }
+            
+            .history-table td:last-child {
+                border-bottom: 0;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+        
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <div class="tool-card">
+            <div class="tool-header">
+                <h2>{{ tool.name }}</h2>
+            </div>
+            
+            <div class="tool-body">
+                <div class="tool-description">
+                    {{ tool.description|linebreaks }}
+                </div>
+                
+                <div class="tool-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Status</div>
+                        <div class="meta-value">
+                            <span class="status-badge {% if tool.available %}status-available{% else %}status-unavailable{% endif %}">
+                                {% if tool.available %}Available{% else %}Not Available{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    {% if tool.category %}
+                    <div class="meta-item">
+                        <div class="meta-label">Category</div>
+                        <div class="meta-value">{{ tool.category }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if tool.location %}
+                    <div class="meta-item">
+                        <div class="meta-label">Location</div>
+                        <div class="meta-value">{{ tool.location }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if tool.acquisition_date %}
+                    <div class="meta-item">
+                        <div class="meta-label">Acquisition Date</div>
+                        <div class="meta-value">{{ tool.acquisition_date }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if tool.last_maintenance %}
+                    <div class="meta-item">
+                        <div class="meta-label">Last Maintenance</div>
+                        <div class="meta-value">{{ tool.last_maintenance }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if maintenance_history %}
+                <div class="maintenance-history">
+                    <h3 class="section-title">Maintenance History</h3>
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Performed By</th>
+                                <th>Notes</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in maintenance_history %}
+                            <tr>
+                                <td data-label="Date">{{ record.date }}</td>
+                                <td data-label="Type">{{ record.maintenance_type }}</td>
+                                <td data-label="Performed By">{{ record.performed_by }}</td>
+                                <td data-label="Notes">{{ record.notes|default:"No notes" }}</td>
+                                <td data-label="Status">
+                                    <span class="status-badge {% if record.status == 'Completed' %}status-available{% else %}status-unavailable{% endif %}">
+                                        {{ record.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    
+                    {% if tool.available %}
+                  
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <div class="actions">
+                    <a href="{% url 'tool_list' %}" class="btn btn-outline">Back to List</a>
+                    
+                    {% if tool.available %}
+                    <a href="" class="btn btn-primary">Schedule Maintenance</a>
+                    {% endif %}
+                    
+                    <a href="{% url 'home' %}" class="btn btn-outline">Home</a>
+                    
+                    {% if perms.tools.can_mark_unavailable and tool.available %}
+                    <form method="post" action="{ }" style="display: inline;">
+                        {% csrf_token %}
+                        
+                    </form>
+                    {% elif perms.tools.can_mark_available and not tool.available %}
+                    <form method="post" action="{ }" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Mark Available</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Flash success message if present in URL params
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMessage = urlParams.get('success');
+            
+            if (successMessage) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'alert-success fade-in';
+                messageDiv.style.backgroundColor = '#d4edda';
+                messageDiv.style.color = '#155724';
+                messageDiv.style.padding = '15px';
+                messageDiv.style.marginBottom = '20px';
+                messageDiv.style.borderRadius = '5px';
+                messageDiv.style.textAlign = 'center';
+                messageDiv.textContent = decodeURIComponent(successMessage);
+                
+                const container = document.querySelector('.container');
+                container.insertBefore(messageDiv, container.firstChild);
+                
+                // Auto-dismiss after 5 seconds
+                setTimeout(() => {
+                    messageDiv.style.opacity = '0';
+                    messageDiv.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => messageDiv.remove(), 500);
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
