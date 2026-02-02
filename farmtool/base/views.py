@@ -34,7 +34,7 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('home')  # Redirect to homepage or login page after logout
+    return redirect('user_login')  # Redirect to homepage or login page after logout
 
 def signup(request):
     if request.method == 'POST':
@@ -132,7 +132,7 @@ def maintain(request, tool_id):
     return render(request, 'maintain.html', {'tool': tool})
 
 
-def mark_completed(request, maintenance_id):
+#def mark_completed(request, maintenance_id):
     maintenance = get_object_or_404(MaintenanceSchedule, id=maintenance_id)
     maintenance.status = 'Completed'
     maintenance.save()
@@ -184,7 +184,13 @@ def contact_view(request):
     
     return render(request, 'contact.html')
    
+def mark_completed(request, schedule_id):
+    schedule = get_object_or_404(MaintenanceSchedule, id=schedule_id)
 
+    if request.method == 'POST':
+        schedule.status = 'Completed'
+        schedule.save()
+        return redirect('maintenance_list') 
 
     
 

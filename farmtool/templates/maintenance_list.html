@@ -278,7 +278,7 @@
                             <td data-label="Notes">{{ schedule.notes|default:"No notes" }}</td>
                             <td data-label="Actions">
                                 {% if schedule.status == "Pending" %}
-                                <form method="post" action="{}" class="inline-form">
+                                <form method="post" action="{% url 'maintain' schedule.tool.id %}" class="inline-form">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-success" aria-label="Mark {{ schedule.tool.name }} maintenance as completed">
                                         Mark as Completed
